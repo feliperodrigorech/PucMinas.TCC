@@ -1,0 +1,28 @@
+docker network create -d bridge network_pucminas
+
+docker pull redis
+docker run -d -p 6379:6379 -i -t --name BoaEntrega-redis --network network_pucminas redis
+
+docker pull rabbitmq
+docker run -d --hostname my-rabbit --name BoaEntrega-rabbit -p 5672:5672 -p 8080:15672 --network network_pucminas rabbitmq:3-management
+
+docker run -d --hostname RegistrationInformation --name RegistrationInformation -p 8081:443 --network network_pucminas -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8081 -e ASPNETCORE_Kestrel__Certificates__Default__Password="rech91" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v $env:USERPROFILE\.aspnet\https:/https/ feliperodrigorech/pucminastccregistrationinformation:latest
+docker run -d --hostname Authentication --name Authentication -p 8082:443 -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8081 -e ASPNETCORE_Kestrel__Certificates__Default__Password="rech91" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v $env:USERPROFILE\.aspnet\https:/https/ feliperodrigorech/pucminastccauthentication:latest
+docker run -d --hostname Gateway --name Gateway -p 8083:443 -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8081 -e ASPNETCORE_Kestrel__Certificates__Default__Password="rech91" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v $env:USERPROFILE\.aspnet\https:/https/ feliperodrigorech/pucminastccgateway:latest
+
+
+
+
+--deploy
+
+docker stop RegistrationInformation
+docker rm RegistrationInformation
+docker run -d --hostname RegistrationInformation --name RegistrationInformation -p 8081:443 --network network_pucminas -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8081 -e ASPNETCORE_Kestrel__Certificates__Default__Password="rech91" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v $env:USERPROFILE\.aspnet\https:/https/ feliperodrigorech/pucminastccregistrationinformation:latest
+
+docker stop Authentication
+docker rm Authentication
+docker run -d --hostname Authentication --name Authentication -p 8082:443 -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8081 -e ASPNETCORE_Kestrel__Certificates__Default__Password="rech91" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v $env:USERPROFILE\.aspnet\https:/https/ feliperodrigorech/pucminastccauthentication:latest
+
+docker stop Gateway
+docker rm Gateway
+docker run -d --hostname Gateway --name Gateway -p 8083:443 -e ASPNETCORE_URLS="https://+;http://+" -e ASPNETCORE_HTTPS_PORT=8081 -e ASPNETCORE_Kestrel__Certificates__Default__Password="rech91" -e ASPNETCORE_Kestrel__Certificates__Default__Path=/https/aspnetapp.pfx -v $env:USERPROFILE\.aspnet\https:/https/ feliperodrigorech/pucminastccgateway:latest

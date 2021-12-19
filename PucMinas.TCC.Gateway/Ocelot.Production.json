@@ -1,0 +1,59 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8082
+        }
+      ],
+      "UpstreamPathTemplate": "/Authentication/{everything}",
+      "UpstreamHttpMethod": [ "Post" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44320
+        }
+      ],
+      "UpstreamPathTemplate": "/CustomerService/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get" ]
+    },
+
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "host.docker.internal",
+          "Port": 8081
+        }
+      ],
+      "UpstreamPathTemplate": "/RegistrationInformation/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+
+    {
+      "DownstreamPathTemplate": "/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44309
+        }
+      ],
+      "UpstreamPathTemplate": "/StrategicManagement/{everything}",
+      "UpstreamHttpMethod": [ "Post", "Get" ]
+    }
+  ],
+
+  "GlobalConfiguration": {}
+}
